@@ -12,8 +12,10 @@ namespace MongoDbWithSQL.Controllers
        
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IMongoCollection<Book> _booksCollection;
+        private readonly IOptions<BookStoreDatabaseSettings> bookStoreDatabaseSettings;
+        private readonly AppDbContext context;
 
-        public WeatherForecastController(IOptions<BookStoreDatabaseSettings> bookStoreDatabaseSettings)
+        public WeatherForecastController(IOptions<BookStoreDatabaseSettings> bookStoreDatabaseSettings,AppDbContext context)
         {
             var mongoClient = new MongoClient(
            bookStoreDatabaseSettings.Value.ConnectionString);
@@ -23,14 +25,21 @@ namespace MongoDbWithSQL.Controllers
 
             _booksCollection = mongoDatabase.GetCollection<Book>(
                 bookStoreDatabaseSettings.Value.BooksCollectionName);
+            this.bookStoreDatabaseSettings = bookStoreDatabaseSettings;
+            this.context = context;
         }
 
         [HttpGet]
         public async Task<List<Book>> GetAsync() =>
       await _booksCollection.Find(_ => true).ToListAsync();
 
-        //public async Task<Book?> GetAsync(string id) =>
-        //    await _booksCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<Book?> GetAsync(string id)
+        {
+
+            var book =  await _booksCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            var employeeDetails = context.EmployeeContactDetails.FirstOrDefault(_ => _.EmployeeId == id);
+            return book;
+        }
 
         //public async Task CreateAsync(Book newBook) =>
         //    await _booksCollection.InsertOneAsync(newBook);
