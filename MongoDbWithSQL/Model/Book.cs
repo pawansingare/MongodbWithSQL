@@ -7,14 +7,17 @@ public class Book
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
+    public string? _id { get; set; }
+    [BsonElement("id")]
+    public int id { get; set; }
 
-    [BsonElement("Name")]
-    public string BookName { get; set; } = null!;
+    [BsonElement("name")]
+    public string Name { get; set; } = null!;
 
-    public decimal Price { get; set; }
+    [BsonElement("Department")]
+    public string Department { get; set; }
+   
+    [BsonElement("Salary")]
+    public string Salary { get; set; } = null!;
 
-    public string Category { get; set; } = null!;
-
-    public string Author { get; set; } = null!;
 }

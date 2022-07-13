@@ -33,11 +33,12 @@ namespace MongoDbWithSQL.Controllers
         public async Task<List<Book>> GetAsync() =>
       await _booksCollection.Find(_ => true).ToListAsync();
 
+        [HttpGet("id")]
         public async Task<Book?> GetAsync(string id)
         {
 
-            var book =  await _booksCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-            var employeeDetails = context.EmployeeContactDetails.FirstOrDefault(_ => _.EmployeeId == id);
+            Book book =  await _booksCollection.Find(x => x._id == id).FirstOrDefaultAsync();
+            var employeeDetails = context.EmployeeDetails.FirstOrDefault(_ => _.Mongo_docid == id);
             return book;
         }
 

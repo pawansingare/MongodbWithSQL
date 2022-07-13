@@ -8,6 +8,6 @@ namespace MongoDbWithSQL
         public AppDbContext(DbContextOptions options)
             : base(options) { }
 
-        public DbSet<EmployeeContactDetails> EmployeeContactDetails { get; set; }
+        public DbSet<EmployeeDetails> EmployeeDetails { get; set; }
     }
 }

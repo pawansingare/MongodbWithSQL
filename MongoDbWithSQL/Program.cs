@@ -9,9 +9,12 @@ builder.Services.Configure<BookStoreDatabaseSettings>(
     builder.Configuration.GetSection("BookStoreDatabase"));
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext, AppDbContext>(options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDb"),
-                                         b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+//builder.Services.AddDbContext<AppDbContext, AppDbContext>(options =>
+//                    options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDb"),
+//                                         b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+           options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDb")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
