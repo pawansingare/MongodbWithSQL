@@ -9,5 +9,6 @@ namespace MongoDbWithSQL
             : base(options) { }
 
         public DbSet<EmployeeDetails> EmployeeDetails { get; set; }
+        public DbSet<ChangedAudit> ChangedAudit { get; set; }
     }
 }

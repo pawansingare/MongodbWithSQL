@@ -16,7 +16,9 @@ public class Book
 
     [BsonElement("Department")]
     public string Department { get; set; }
-   
+    [BsonElement("Address")]
+    public string Address { get; set; }
+
     [BsonElement("Salary")]
     public string Salary { get; set; } = null!;
 

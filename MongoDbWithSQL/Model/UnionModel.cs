@@ -1,11 +1,7 @@
-﻿using MongoDbWithSQL.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace MongoDbWithSQL.Model
+﻿namespace MongoDbWithSQL.Model
 {
-    public class EmployeeDetails
+    public class UnionModel
     {
-        [Key]
         public int EmployeeId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -14,7 +10,17 @@ namespace MongoDbWithSQL.Model
         public string? EmpCode { get; set; }
         public long MobileNo { get; set; }
         public string? Mongo_docid { get; set; }
-        //public List<Book> Books { get; set; }
 
+       
+
+
+       
+        public string Name { get; set; } = null!;
+
+       
+        public string Department { get; set; }
+
+       
+        public string Salary { get; set; } = null!;
     }
 }

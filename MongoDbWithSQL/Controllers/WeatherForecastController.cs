@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDbWithSQL.Model;
 using MongoDbWithSQL.Models;
 
 namespace MongoDbWithSQL.Controllers
@@ -30,26 +31,38 @@ namespace MongoDbWithSQL.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Book>> GetAsync() =>
-      await _booksCollection.Find(_ => true).ToListAsync();
-
-        [HttpGet("id")]
-        public async Task<Book?> GetAsync(string id)
+        public async Task<List<UnionModel>> GetAsync()
         {
+            try
+            {
+                List<Book> allBooks = await _booksCollection.Find(_ => true).ToListAsync();
+                var ids = allBooks.Select(c => c._id);
 
-            Book book =  await _booksCollection.Find(x => x._id == id).FirstOrDefaultAsync();
-            var employeeDetails = context.EmployeeDetails.FirstOrDefault(_ => _.Mongo_docid == id);
-            return book;
+                List<EmployeeDetails> employeeDetailsList = context.EmployeeDetails.Where(e => ids.Contains(e.Mongo_docid)).ToList();
+                
+                return (from book in allBooks
+                           join employee in employeeDetailsList on book._id equals employee.Mongo_docid
+                           select new UnionModel
+                           {
+                               Name = book.Name,
+                               Department = book.Department,
+                               Salary = book.Salary,
+                               FirstName = employee.FirstName,
+                               LastName = employee.LastName,
+                               Address = book.Address!=null ? book.Address: employee.Address,
+                               City = employee.City,
+                               EmpCode = employee.EmpCode,
+                               MobileNo = employee.MobileNo,
+                               Mongo_docid = book._id,
+                               EmployeeId = employee.EmployeeId
+                           }).ToList();               
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
-
-        //public async Task CreateAsync(Book newBook) =>
-        //    await _booksCollection.InsertOneAsync(newBook);
-
-        //public async Task UpdateAsync(string id, Book updatedBook) =>
-        //    await _booksCollection.ReplaceOneAsync(x => x.Id == id, updatedBook);
-
-        //public async Task RemoveAsync(string id) =>
-        //    await _booksCollection.DeleteOneAsync(x => x.Id == id);
 
     }
 }
