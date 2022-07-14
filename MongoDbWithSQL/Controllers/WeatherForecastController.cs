@@ -29,6 +29,11 @@ namespace MongoDbWithSQL.Controllers
             this.bookStoreDatabaseSettings = bookStoreDatabaseSettings;
             this.context = context;
         }
+        //[HttpPost]
+        //public async IActionResult AddChangedLog(ChangedAudit changedAudit)
+        //{
+        //    changedAudit changedAudit1 =new changedAudit
+        //}
 
         [HttpGet]
         public async Task<List<UnionModel>> GetAsync()
@@ -45,6 +50,7 @@ namespace MongoDbWithSQL.Controllers
                            select new UnionModel
                            {
                                Name = book.Name,
+                               //deptempname= department.employee.empname
                                Department = book.Department,
                                Salary = book.Salary,
                                FirstName = employee.FirstName,
